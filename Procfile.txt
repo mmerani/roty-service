@@ -1,2 +1,2 @@
-web gunicorn service.app:app
+web gunicorn app:app
 
