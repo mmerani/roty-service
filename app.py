@@ -8,8 +8,6 @@ Created on Fri Jan 17 12:43:44 2020
 from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import json
-import os
-
 
 flask_app = Flask(__name__)
 app = Api(app = flask_app, 
@@ -62,5 +60,4 @@ class MainClass(Resource):
             })
     
 if __name__ == '__main__': 
-	port = int(os.environ.get("PORT", 5000))  
-	flask_app.run(host='0.0.0.0', port=5000, debug=False)
+	flask_app.run()
