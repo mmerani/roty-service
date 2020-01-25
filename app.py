@@ -9,8 +9,8 @@ from flask import Flask, request, jsonify, make_response
 from flask_restplus import Api, Resource, fields
 import json
 
-flask_app = Flask(__name__)
-api = Api(app = flask_app, 
+app = Flask(__name__)
+api = Api(app = app, 
           version = "1.0", 
           title = "2020 NBA Rookie of the Predictions", 
           description = "Predict the rookie of the year")
@@ -60,4 +60,4 @@ class MainClass(Resource):
             })
     
 if __name__ == '__main__': 
-	flask_app.run()
+	app.run()
