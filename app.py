@@ -10,14 +10,14 @@ from flask_restplus import Api, Resource, fields
 import json
 
 flask_app = Flask(__name__)
-app = Api(app = flask_app, 
+api = Api(app = flask_app, 
           version = "1.0", 
           title = "2020 NBA Rookie of the Predictions", 
           description = "Predict the rookie of the year")
 
-name_space = app.namespace('predictions', description='Prediction API')
+name_space = api.namespace('predictions', description='Prediction API')
 
-model = app.model('Prediction params', 
+model = api.model('Prediction params', 
                  {'model': fields.Integer(required=True)})
 
 def load_json():
@@ -37,7 +37,7 @@ class MainClass(Resource):
         response.headers.add('Access-Control-Allow-Methods', "*")
         return response
 
-    @app.expect(model)     
+    @api.expect(model)     
     def post(self):
         try: 
             #with open('predictions.json', 'r') as f:
