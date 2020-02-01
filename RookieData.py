@@ -42,32 +42,38 @@ def get_additonal_info(player_url):
     #print(player_url)
     if player_url == '':
         return {}
-    url = 'https://www.basketball-reference.com' + player_url
-    request = requests.get(url)
-    soup = BeautifulSoup(request.text, 'lxml')
-    advanced_table = soup.find(attrs={'id':'all_advanced'})
-    rows = advanced_table.findAll('tr')
     additional_player_info = {}
     
-    for child in advanced_table.children:
-        if "table_outer_container" in child:
-            other_soup = BeautifulSoup(child)
-            rows = other_soup.findAll("tr")
-
-    for row in rows:
-        if 'id' in row.attrs and row.attrs['id'] == 'advanced.2020':
-            
-            additional_player_info['ws'] = float(row.find('td', attrs={'data-stat': 'ws'}).text)
-            additional_player_info['ws_per_48'] = float(row.find('td', attrs={'data-stat': 'ws_per_48'}).text)
-            break
+    try:
+        url = 'https://www.basketball-reference.com' + player_url
+        request = requests.get(url)
+        soup = BeautifulSoup(request.text, 'lxml')
+        advanced_table = soup.find(attrs={'id':'all_advanced'})
+        rows = advanced_table.findAll('tr')
         
-    player_info = soup.findAll("p")
-    for p in player_info:
-        strong = p.find('strong')
-        if strong and strong.getText() == 'Team':
-            additional_player_info['team'] = p.find('a').text
-            #print(p.find('a').text)
-            break
+        
+        for child in advanced_table.children:
+            if "table_outer_container" in child:
+                other_soup = BeautifulSoup(child)
+                rows = other_soup.findAll("tr")
+    
+        for row in rows:
+            if 'id' in row.attrs and row.attrs['id'] == 'advanced.2020':
+                
+                additional_player_info['ws'] = float(row.find('td', attrs={'data-stat': 'ws'}).text)
+                additional_player_info['ws_per_48'] = float(row.find('td', attrs={'data-stat': 'ws_per_48'}).text)
+                break
+            
+        player_info = soup.findAll("p")
+        for p in player_info:
+            strong = p.find('strong')
+            if strong and strong.getText() == 'Team':
+                additional_player_info['team'] = p.find('a').text
+                #print(p.find('a').text)
+                break
+    except:
+        additional_player_info['ws'] = 0
+        additional_player_info['ws_per_48'] = 0
         
     if 'team' not in additional_player_info:
         additional_player_info['team'] = ''
